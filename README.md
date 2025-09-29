@@ -23,5 +23,5 @@ Classify short transaction messages into categories such as Food, Travel, Shoppi
 
 ---
 
-## Folder Structure
+##Sample Output
 
