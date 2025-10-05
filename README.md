@@ -24,6 +24,8 @@ Classify short transaction messages into categories such as Food, Travel, Shoppi
 ---
 
 ## Sample Output
-<img width="216" height="69" alt="image" src="https://github.com/user-attachments/assets/6f0ed353-90ea-474d-b4ad-8c5348802c85" />
+
+<img width="212" height="65" alt="image" src="https://github.com/user-attachments/assets/5f04f449-5faf-4477-bf32-389c79f72f65" />
+
 
 
