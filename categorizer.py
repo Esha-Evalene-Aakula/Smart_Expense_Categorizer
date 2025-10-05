@@ -42,7 +42,7 @@ print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred))
 
 # Test samples
-samples = ["Swiggy 300", "Bus 70", "Book 300"]
+samples = ["Swiggy 300", "Bus 55", "Book 300"]
 sample_tfidf = vectorizer.transform(samples)
 predictions = model.predict(sample_tfidf)
 for t, p in zip(samples, predictions):
