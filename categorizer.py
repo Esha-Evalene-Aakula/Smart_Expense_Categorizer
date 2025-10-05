@@ -5,22 +5,24 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
 # Dataset
-data = [
-    ["Swiggy 250", "Food"],
-    ["Uber 300", "Travel"],
-    ["Amazon 1200", "Shopping"],
-    ["Groceries 450", "Groceries"],
-    ["Netflix 500", "Entertainment"],
-    ["Stationery 100", "Education"],
-    ["Book 250", "Education"],
-    ["Gym 700", "Health"],
-    ["Bus 50", "Travel"],
-    ["Coffee 150", "Food"],
-]
+data = {
+    'text': [
+        'Swiggy 300', 'Zomato 250', 'Dominos 500',
+        'Uber 200', 'Ola 150', 'Bus 70', 'Train 120',
+        'Book 300', 'Tuition 2000', 'Course 500',
+        'Electricity Bill 700', 'Rent 5000', 'Groceries 1200', 'Movie 350'
+    ],
+    'category': [
+        'Food', 'Food', 'Food',
+        'Travel', 'Travel', 'Travel', 'Travel',
+        'Education', 'Education', 'Education',
+        'Bills', 'Bills', 'Groceries', 'Entertainment'
+    ]
+}
 
-df = pd.DataFrame(data, columns=["Transaction", "Category"])
-print("Dataset preview:")
-print(df.head())
+df = pd.DataFrame(data)
+print(df)
+
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(
