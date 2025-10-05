@@ -1,9 +1,10 @@
-# expense_categorizer.py
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
+import joblib
+import random
 
 # Dataset
 data = {
@@ -24,10 +25,8 @@ data = {
 df = pd.DataFrame(data)
 df['text'] = df['text'].str.lower()
 
-# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(df['text'], df['category'], test_size=0.2, random_state=42)
 
-# TF-IDF + Logistic Regression
 vectorizer = TfidfVectorizer()
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
@@ -35,17 +34,28 @@ X_test_tfidf = vectorizer.transform(X_test)
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train_tfidf, y_train)
 
-# Evaluate
 y_pred = model.predict(X_test_tfidf)
 print("Accuracy:", accuracy_score(y_test, y_pred))
-print(classification_report(y_test, y_pred))
 
-# Predict custom transactions
-test_samples = ['Swiggy 300', 'Bus 70', 'Book 300']
-test_samples = [t.lower() for t in test_samples]
-X_test_custom = vectorizer.transform(test_samples)
-predictions = model.predict(X_test_custom)
+def categorize_transaction(text):
+    text = text.lower()
+    vec = vectorizer.transform([text])
+    return model.predict(vec)[0]
 
-print("\nSample Predictions:\n")
-for text, label in zip(test_samples, predictions):
-    print(f"{text} → {label}")
+def suggest_study_plan():
+    subjects = ['Math', 'Science', 'History', 'English', 'Programming']
+    plan = random.sample(subjects, 3)
+    return {
+        "Morning": plan[0],
+        "Afternoon": plan[1],
+        "Evening": plan[2]
+    }
+
+transactions = ['Swiggy 300', 'Bus 70', 'Book 300']
+print("\nExpense Categorization:")
+for t in transactions:
+    print(f"{t} → {categorize_transaction(t)}")
+
+print("\nSuggested Daily Study Plan:")
+for k, v in suggest_study_plan().items():
+    print(f"{k}: {v}")
