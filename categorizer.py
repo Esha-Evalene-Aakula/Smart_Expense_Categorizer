@@ -1,8 +1,9 @@
+# expense_categorizer.py
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score, classification_report
 
 # Dataset
 data = {
@@ -21,31 +22,30 @@ data = {
 }
 
 df = pd.DataFrame(data)
-print(df)
+df['text'] = df['text'].str.lower()
 
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(df['text'], df['category'], test_size=0.2, random_state=42)
 
-# Split
-X_train, X_test, y_train, y_test = train_test_split(
-    df["Transaction"], df["Category"], test_size=0.3, random_state=42
-)
-
-# TF-IDF
+# TF-IDF + Logistic Regression
 vectorizer = TfidfVectorizer()
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
-# Train
-model = LogisticRegression()
+model = LogisticRegression(max_iter=1000)
 model.fit(X_train_tfidf, y_train)
 
 # Evaluate
 y_pred = model.predict(X_test_tfidf)
-print("\nClassification Report:\n")
+print("Accuracy:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 
-# Test samples
-samples = ["Swiggy 300", "Bus 55", "Book 300"]
-sample_tfidf = vectorizer.transform(samples)
-predictions = model.predict(sample_tfidf)
-for t, p in zip(samples, predictions):
-    print(f"{t} → {p}")
+# Predict custom transactions
+test_samples = ['Swiggy 300', 'Bus 70', 'Book 300']
+test_samples = [t.lower() for t in test_samples]
+X_test_custom = vectorizer.transform(test_samples)
+predictions = model.predict(X_test_custom)
+
+print("\nSample Predictions:\n")
+for text, label in zip(test_samples, predictions):
+    print(f"{text} → {label}")
